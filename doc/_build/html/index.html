@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dagger - The File Dependency Graph Engine &mdash; dagger 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="dagger 1.3.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">dagger 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dagger-the-file-dependency-graph-engine">
+<h1><a class="toc-backref" href="#id1">Dagger - The File Dependency Graph Engine</a><a class="headerlink" href="#dagger-the-file-dependency-graph-engine" title="Permalink to this headline">¶</a></h1>
+<img alt="_images/banner.png" src="_images/banner.png" />
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dagger-the-file-dependency-graph-engine" id="id1">Dagger - The File Dependency Graph Engine</a><ul>
+<li><a class="reference internal" href="#overview" id="id2">Overview</a></li>
+<li><a class="reference internal" href="#features" id="id3">Features</a></li>
+<li><a class="reference internal" href="#quick-example" id="id4">Quick Example</a></li>
+<li><a class="reference internal" href="#download" id="id5">Download</a></li>
+<li><a class="reference internal" href="#installation" id="id6">Installation</a></li>
+<li><a class="reference internal" href="#testing" id="id7">Testing</a></li>
+<li><a class="reference internal" href="#benchmarking" id="id8">Benchmarking</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples" id="id9">Examples</a><ul>
+<li><a class="reference internal" href="#hashing-with-plain-text-database" id="id10">Hashing with Plain Text Database</a></li>
+<li><a class="reference internal" href="#hashing-with-sqlite" id="id11">Hashing with Sqlite</a></li>
+<li><a class="reference internal" href="#hashing-specific-files" id="id12">Hashing Specific Files</a></li>
+<li><a class="reference internal" href="#phony-nodes" id="id13">Phony Nodes</a></li>
+<li><a class="reference internal" href="#additional-graph-results" id="id14">Additional Graph Results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#news" id="id15">News</a></li>
+<li><a class="reference internal" href="#administration" id="id16">Administration</a><ul>
+<li><a class="reference internal" href="#distribution" id="id17">Distribution</a></li>
+<li><a class="reference internal" href="#publishing" id="id18">Publishing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#license" id="id19">License</a></li>
+<li><a class="reference internal" href="#api" id="id20">API</a></li>
+<li><a class="reference internal" href="#indices-and-tables" id="id21">Indices and tables</a></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id2">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://sourceforge.net/projects/pythondagger">Dagger</a> evaluates file dependencies in a directed-acyclic-graph (DAG)
+like GNU make, but timestamps or hashes can be enabled per file.
+This allows you to use fast timestamp comparisons with large files,
+and hashing on small files. When hashing is used, it&#8217;s stored in a
+simple 2 column text file with filename,hash per line or in a sqlite
+database. Dagger can be used as a building block for a larger build
+system that is serial or parallel.</p>
+<p>Dagger is written in Python to make it portable and extensible. It&#8217;s
+graph evaluation engine is non-recursive, so it can handle very deep
+dependency paths. A benchmark tool (see below) is available to test and visualize complex graphs, and demonstrates using 1 million files.</p>
+</div>
+<div class="section" id="features">
+<h2><a class="toc-backref" href="#id3">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Dependency based on modified time or hash (md5) for individual or all files.</li>
+<li>Force individual files as stale or uptodate.</li>
+<li>Missing files are automatically stale, unless set as phony.</li>
+<li>All-paths computation for every node and discovery order.</li>
+<li>Written in pure Python to be platform agnostic.</li>
+<li>Non-recursive graph algorithm.</li>
+<li>Hash database in text or sqlite (and in-memory during runtime).</li>
+<li>Graphviz dot file export that colors stale file nodes.</li>
+<li>Iterate over results grouped by job queue size to allow parallel processing of mutually independent nodes.</li>
+</ul>
+</div>
+<div class="section" id="quick-example">
+<h2><a class="toc-backref" href="#id4">Quick Example</a><a class="headerlink" href="#quick-example" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s create a small graph that looks like this:</p>
+<div class="figure align-center">
+<img alt="_images/dot.png" src="_images/dot.png" />
+<p class="caption"><strong>example.dot</strong> visualized with kgraphviewer. Stale nodes are red.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Create some empty test files.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;touch 1 2 3 4 5 6 7&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dagger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span> <span class="o">=</span> <span class="n">dagger</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add nodes and others they depend on.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">,</span><span class="s">&#39;3&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;3&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;4&#39;</span><span class="p">,</span><span class="s">&#39;5&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;6&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;3&#39;</span><span class="p">,</span><span class="s">&#39;7&#39;</span><span class="p">])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Force this node to be old, and all its dependent parents.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">stale</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Evaluate the graph.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Export for visualizing.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="s">&#39;example.dot&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Get iterator.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span> <span class="o">=</span> <span class="n">dag</span><span class="o">.</span><span class="n">iter</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># See how many items there are in total.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+<span class="go">4</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Get next 2 files we can process in parallel.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">todo</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">todo</span>
+<span class="go">[&#39;4&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Only one is returned because other nodes depend on it.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Pretend we finished first task, so remove it and get next 2.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">todo</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">todo</span>
+<span class="go">[&#39;3&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># We still get single item because 6 &amp; 1 depend on 3.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">todo</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">todo</span>
+<span class="go">[&#39;1&#39;,&#39;6&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># We finally get two independent items.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="download">
+<h2><a class="toc-backref" href="#id5">Download</a><a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://sourceforge.net/projects/pythondagger/files/">Source code</a></p>
+<p><a class="reference external" href="http://pypi.python.org/pypi/dagger">PYPI</a> has a Windows installer.</p>
+</div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#id6">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># On a system with PIP installed.</span>
+<span class="nv">$ </span>pip install -U dagger
+
+<span class="c"># If PIP is not available, you can use a source distribution.</span>
+<span class="nv">$ </span>tar zxvf *dagger*.tgz
+<span class="nv">$ </span><span class="nb">cd</span> *dagger*
+<span class="nv">$ </span>sudo python setup.py install
+
+<span class="c"># For Windows, download and run the binary installer from PYPI.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing">
+<h2><a class="toc-backref" href="#id7">Testing</a><a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Run the unit tests.</span>
+<span class="nv">$ </span>make <span class="nb">test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="benchmarking">
+<h2><a class="toc-backref" href="#id8">Benchmarking</a><a class="headerlink" href="#benchmarking" title="Permalink to this headline">¶</a></h2>
+<p>There is a script in <tt class="docutils literal"><span class="pre">bench/</span></tt> to help you see how fast dagger can evaluate the dependency graph.
+You can specify how many children there are per node and depth of the mock graph.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>bench
+<span class="nv">$ </span>python bench.py --levels 3 --width 2 --dot 3x2.dot
+nodes: <span class="nv">inner</span><span class="o">=</span>6 <span class="nv">outer</span><span class="o">=</span>8 <span class="nv">total</span><span class="o">=</span>14
+0.0s Run
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="_images/dot3x2.png" src="_images/dot3x2.png" />
+<p class="caption">3 level, 2 child wide graph output by bench.py with 1 old node (&#8216;7&#8217;).</p>
+</div>
+<p>These are larger test cases that simulate 56,000 and 1 million files.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python bench.py --levels 6 --width 6 --allpaths
+nodes: <span class="nv">inner</span><span class="o">=</span>9330 <span class="nv">outer</span><span class="o">=</span>46656 <span class="nv">total</span><span class="o">=</span>55986
+0.24s Run
+
+<span class="c"># See if even faster with pypy.</span>
+<span class="nv">$ </span>pypy bench.py --levels 6 --width 6 --allpaths
+nodes: <span class="nv">inner</span><span class="o">=</span>9330 <span class="nv">outer</span><span class="o">=</span>46656 <span class="nv">total</span><span class="o">=</span>55986
+0.16s Run
+
+<span class="c"># Try extreme case of simulating 1 million files.</span>
+<span class="nv">$ </span>python bench.py --levels 7 --width 7 --allpaths
+nodes: <span class="nv">inner</span><span class="o">=</span>137256 <span class="nv">outer</span><span class="o">=</span>823543 <span class="nv">total</span><span class="o">=</span>960799
+6.35s Run
+
+<span class="c"># pypy reports a shorter runtime for the 1 million node graph.</span>
+<span class="nv">$ </span>pypy ...
+3.17s Run
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h1><a class="toc-backref" href="#id9">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hashing-with-plain-text-database">
+<h2><a class="toc-backref" href="#id10">Hashing with Plain Text Database</a><a class="headerlink" href="#hashing-with-plain-text-database" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># It&#39;s ok if database doesn&#39;t exist yet.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span> <span class="o">=</span> <span class="n">dagger</span><span class="o">.</span><span class="n">dagger</span><span class="p">(</span><span class="s">&#39;/home/project/hash.txt&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Enable hashing for all files.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">hashall</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Evaluates the dependencies and computes hashes if none existed.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Export the file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">exporthash</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hashing-with-sqlite">
+<h2><a class="toc-backref" href="#id11">Hashing with Sqlite</a><a class="headerlink" href="#hashing-with-sqlite" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># This time use sqlite (in-memory) database instead of text file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Ok if doesn&#39;t exist yet. It will be created.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span> <span class="o">=</span> <span class="n">dagger</span><span class="o">.</span><span class="n">dagger</span><span class="p">(</span><span class="s">&#39;hash.sqlite&#39;</span><span class="p">,</span> <span class="n">sqlite</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">sqlite_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Export the file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">exporthash</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hashing-specific-files">
+<h2><a class="toc-backref" href="#id12">Hashing Specific Files</a><a class="headerlink" href="#hashing-specific-files" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Enable hashing for file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">hash</span><span class="p">(</span><span class="s">&#39;myfile&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Turn it off (hashing is off by default for all nodes).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">hash</span><span class="p">(</span><span class="s">&#39;myfile&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="phony-nodes">
+<h2><a class="toc-backref" href="#id13">Phony Nodes</a><a class="headerlink" href="#phony-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># In a graph: 1 -&gt; 2 -&gt; 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># 1 and 2 would be stale if 2 was missing, by default.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;touch 1 3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;3&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">stale</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">stale</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># However, you can make 2 phony, so 1 is stale if 3 was,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># or 1 is itself stale due to an old hash or it&#39;s missing.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">phony</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">stale</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">stale</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="additional-graph-results">
+<h2><a class="toc-backref" href="#id14">Additional Graph Results</a><a class="headerlink" href="#additional-graph-results" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dag</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># See the depth-first-search node order.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">dag</span><span class="o">.</span><span class="n">ordernames</span><span class="p">()</span>
+<span class="go">2,4,5,3,1,7,6</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Access the search ordered nodes directly.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">dag</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">list</span>
+<span class="go">[&lt;dagger.node object at ...&gt;, &lt;dagger.node object at ...&gt;, ...]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Get paths for a node; root nodes are rightmost in sublists.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">dag</span><span class="o">.</span><span class="n">pathnames</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+<span class="go">[[&#39;3&#39;, &#39;1&#39;], [&#39;3&#39;, &#39;6&#39;]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="news">
+<h1><a class="toc-backref" href="#id15">News</a><a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h1>
+<p><strong>v1.3.0</strong> 2012/11/25</p>
+<ul class="simple">
+<li>Added phony node support.</li>
+<li>Migrated documentation to Sphinx.</li>
+</ul>
+<p><strong>v1.2.2</strong> 2012/11/22</p>
+<ul class="simple">
+<li>Fixed iterator creation for root nodes.</li>
+</ul>
+<p><strong>v1.2.1</strong> 2012/11/21</p>
+<ul class="simple">
+<li>Missing files are automatically considered stale.</li>
+</ul>
+<p><strong>v1.2.0</strong> 2012/11/21</p>
+<ul class="simple">
+<li>Made private container &#8220;idict&#8221; iterable.</li>
+</ul>
+<p><strong>v1.1.0</strong> 2012/11/19</p>
+<ul class="simple">
+<li>Added <cite>__len__</cite> function to iterator to see how many tasks remain.</li>
+</ul>
+<p><strong>v1.0.0</strong> 2012/11/14</p>
+<ul class="simple">
+<li>Iterator added to access independent sets of nodes, thus allowing parallel processing in context of &#8220;make&#8221; processflows.</li>
+</ul>
+<p><strong>v0.0.0</strong> 2012/10/15</p>
+<ul class="simple">
+<li>Initial release.</li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="administration">
+<h1><a class="toc-backref" href="#id16">Administration</a><a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="distribution">
+<h2><a class="toc-backref" href="#id17">Distribution</a><a class="headerlink" href="#distribution" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>make clean
+make html
+make dist <span class="nv">VER</span><span class="o">=</span>1.3.0
+make pypidocs
+make pypi
+</pre></div>
+</div>
+</div>
+<div class="section" id="publishing">
+<h2><a class="toc-backref" href="#id18">Publishing</a><a class="headerlink" href="#publishing" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>ssh -t rsz,pythondagger@shell.sourceforge.net create
+
+scp -r doc/_build/html/* <span class="se">\</span>
+rsz,pythondagger@shell.sourceforge.net:/home/project-web/pythondagger/htdocs
+
+scp ../pythondagger-1.3.0.tar.gz <span class="se">\</span>
+rsz,pythondagger@shell.sourceforge.net:/home/frs/project/p/py/pythondagger
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="license">
+<h1><a class="toc-backref" href="#id19">License</a><a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>Copyright 2012 Remik Ziemlinski &#8211; GNU General Public License</p>
+</div>
+<div class="section" id="api">
+<h1><a class="toc-backref" href="#id20">API</a><a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="code.html#module-dagger" title="dagger"><tt class="xref py py-mod docutils literal"><span class="pre">dagger</span></tt></a> module.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h1><a class="toc-backref" href="#id21">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dagger - The File Dependency Graph Engine</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#quick-example">Quick Example</a></li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#benchmarking">Benchmarking</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#hashing-with-plain-text-database">Hashing with Plain Text Database</a></li>
+<li><a class="reference internal" href="#hashing-with-sqlite">Hashing with Sqlite</a></li>
+<li><a class="reference internal" href="#hashing-specific-files">Hashing Specific Files</a></li>
+<li><a class="reference internal" href="#phony-nodes">Phony Nodes</a></li>
+<li><a class="reference internal" href="#additional-graph-results">Additional Graph Results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#news">News</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#administration">Administration</a><ul>
+<li><a class="reference internal" href="#distribution">Distribution</a></li>
+<li><a class="reference internal" href="#publishing">Publishing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">dagger 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Remik Ziemlinski.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dagger Module API &mdash; dagger 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="dagger 1.3.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">dagger 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-dagger">
+<span id="dagger-module-api"></span><h1>dagger Module API<a class="headerlink" href="#module-dagger" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="dagger.dagger">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">dagger</tt><big>(</big><em>hashfile=''</em>, <em>sqlite=False</em>, <em>sqlite_memory=1</em><big>)</big><a class="headerlink" href="#dagger.dagger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates file dependencies in pure python.</p>
+<dl class="method">
+<dt id="dagger.dagger.add">
+<tt class="descname">add</tt><big>(</big><em>target</em>, <em>sources=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#dagger.dagger.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make target depend on optional sources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.dot">
+<tt class="descname">dot</tt><big>(</big><em>out=None</em>, <em>format=None</em>, <em>color=True</em><big>)</big><a class="headerlink" href="#dagger.dagger.dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dot graph as string and optionally write to file &#8216;out&#8217;.
+Stale nodes will be colored red.</p>
+<p>You can set the file name &#8216;format&#8217; for node labels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.dagger.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text dump of nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.exporthash">
+<tt class="descname">exporthash</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.dagger.exporthash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write hashdb for all nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.get">
+<tt class="descname">get</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#dagger.dagger.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get node by name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.hash">
+<tt class="descname">hash</tt><big>(</big><em>name</em>, <em>enable=1</em><big>)</big><a class="headerlink" href="#dagger.dagger.hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable hashing for file node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.iter">
+<tt class="descname">iter</tt><big>(</big><em>names=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#dagger.dagger.iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator for all stale nodes listed by name (and their dependents). If [] is given, then all stale nodes (and their dependents) will be returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.ordernames">
+<tt class="descname">ordernames</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.dagger.ordernames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return names of files discovered during graph evaluation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.pathnames">
+<tt class="descname">pathnames</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#dagger.dagger.pathnames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of lists where paths use names instead of object references.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.phony">
+<tt class="descname">phony</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#dagger.dagger.phony" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node with name to be phony, so even when file with name is missing, it won&#8217;t be considered stale, unless it has a stale child.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.resetnodes">
+<tt class="descname">resetnodes</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.dagger.resetnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.run">
+<tt class="descname">run</tt><big>(</big><em>allpaths=True</em><big>)</big><a class="headerlink" href="#dagger.dagger.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find stale nodes based on modtime or hash.</p>
+<p>allpaths: If true, also find all paths from roots to leaf nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.stale">
+<tt class="descname">stale</tt><big>(</big><em>name</em>, <em>force=1</em><big>)</big><a class="headerlink" href="#dagger.dagger.stale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force node with name to be stale (force=1) or uptodate (force=0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.dagger.tree">
+<tt class="descname">tree</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.dagger.tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return simple tree string of all nodes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.hashdb">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">hashdb</tt><big>(</big><em>fn=''</em><big>)</big><a class="headerlink" href="#dagger.hashdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads, queries, computes and exports &#8220;file,hash&#8221; per line.</p>
+<dl class="method">
+<dt id="dagger.hashdb.export">
+<tt class="descname">export</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.hashdb.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out db to text file with file names and hashes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb.get">
+<tt class="descname">get</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#dagger.hashdb.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get hash for given filename in db.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb.load">
+<tt class="descname">load</tt><big>(</big><em>silent=False</em><big>)</big><a class="headerlink" href="#dagger.hashdb.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads db text file.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="dagger.hashdb.md5">
+<em class="property">static </em><tt class="descname">md5</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#dagger.hashdb.md5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return md5 checksum for file named &#8216;fn&#8217; or None if error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb.set">
+<tt class="descname">set</tt><big>(</big><em>fn</em>, <em>hash</em><big>)</big><a class="headerlink" href="#dagger.hashdb.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put hash for file into table.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb.update">
+<tt class="descname">update</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#dagger.hashdb.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute hash for file and update db entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.hashdb_sqlite">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">hashdb_sqlite</tt><big>(</big><em>fn=''</em>, <em>memory=False</em><big>)</big><a class="headerlink" href="#dagger.hashdb_sqlite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses a sqlite database. Can be used inmemory after loading file.</p>
+<dl class="method">
+<dt id="dagger.hashdb_sqlite.export">
+<tt class="descname">export</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.hashdb_sqlite.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out db to file with file names and hashes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb_sqlite.get">
+<tt class="descname">get</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#dagger.hashdb_sqlite.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get hash for given filename in db.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb_sqlite.load">
+<tt class="descname">load</tt><big>(</big><em>silent=False</em><big>)</big><a class="headerlink" href="#dagger.hashdb_sqlite.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads sqlite db file if it exists and optionally into memory. If none exists, a new db is created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.hashdb_sqlite.set">
+<tt class="descname">set</tt><big>(</big><em>fn</em>, <em>hash</em><big>)</big><a class="headerlink" href="#dagger.hashdb_sqlite.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put hash for file into table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.idict">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">idict</tt><a class="headerlink" href="#dagger.idict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores append index and O(1) lookup of index using key.</p>
+<dl class="method">
+<dt id="dagger.idict.append">
+<tt class="descname">append</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#dagger.idict.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add unique item, store its index and return index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.idict.index">
+<tt class="descname">index</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#dagger.idict.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index for item. None if not in container.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.iterator">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">iterator</tt><big>(</big><em>dag</em>, <em>items</em><big>)</big><a class="headerlink" href="#dagger.iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over dagger results and get groups of items mutually exclusive in dependency graph. Use for guiding serial or parallel processing.</p>
+<dl class="method">
+<dt id="dagger.iterator.next">
+<tt class="descname">next</tt><big>(</big><em>n=1</em><big>)</big><a class="headerlink" href="#dagger.iterator.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get next n independent item names. n=1 by default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.iterator.remove">
+<tt class="descname">remove</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#dagger.iterator.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove item from candidate list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.ldict">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">ldict</tt><big>(</big><em>lst=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#dagger.ldict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hybrid linked-list/dict container for O(1) removal of append-sorted data keys. Benchmark shows that it is much faster than plain list for large arrays (see bench/bench_ldict.py).</p>
+<dl class="method">
+<dt id="dagger.ldict.get">
+<tt class="descname">get</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#dagger.ldict.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns ldict_node for data item.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.ldict_node">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">ldict_node</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#dagger.ldict_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node for ldict that wraps data and holds double-links.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dagger.node">
+<em class="property">class </em><tt class="descclassname">dagger.</tt><tt class="descname">node</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#dagger.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>File node for dependecy graph.</p>
+<dl class="method">
+<dt id="dagger.node.add">
+<tt class="descname">add</tt><big>(</big><em>*nodes</em><big>)</big><a class="headerlink" href="#dagger.node.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add one or more nodes as children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.node.build_paths_set">
+<tt class="descname">build_paths_set</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.node.build_paths_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make set of nodes that are in paths lists to allow quick lookups.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.node.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.node.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return string with basic node info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.node.format">
+<tt class="descname">format</tt><big>(</big><em>pat=None</em><big>)</big><a class="headerlink" href="#dagger.node.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;return formatted string. 
+&#64;param pat: Supported format specifiers:
+%a: absolute name
+%d: date
+%b: base name
+%r: root name (no directory prefix or extension suffix)
+%m: modified time
+None: as-is name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.node.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#dagger.node.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset staleness, hash and time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dagger.node.update">
+<tt class="descname">update</tt><big>(</big><em>time=True</em>, <em>hash=False</em><big>)</big><a class="headerlink" href="#dagger.node.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get modified time for file from system and optionally compute hash.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="dagger.time2strings">
+<tt class="descclassname">dagger.</tt><tt class="descname">time2strings</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#dagger.time2strings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time (from os.path.getmtime) to date and time strings.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/code.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">dagger 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Remik Ziemlinski.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
