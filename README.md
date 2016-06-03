@@ -5,11 +5,21 @@ This is Remik Ziemlinski's 2012 **dagger** library with fixes so that it will wo
 
 All the tests and the benchmarks should work, however I didn't touch `setup.py` so that might still be wrong.
 
-To install:
+To install for Python 2:
 ```
-pip install git+https://github.com/BruceEckel/pythondagger23
+py -2 -m pip install git+https://github.com/BruceEckel/pythondagger23
 ```
-Or, if you've downloaded and unpacked the zip file:
+
+To install for Python 3:
 ```
-python setup.py install
+py -3 -m pip install git+https://github.com/BruceEckel/pythondagger23
+```
+
+If you've downloaded and unpacked the zip file:
+```
+py -2 setup.py install
+```
+or
+```
+py -3 setup.py install
 ```
